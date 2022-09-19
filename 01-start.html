@@ -72,6 +72,73 @@
                 </script>
             </section>
 
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h2>Get geodata by IP</h2>
+                        <a href="#" class="btn btn-primary" onclick="fn3()">Request</a>
+                        <p id="result3"></p>
+                    </div>
+                </div>
+                <script>
+                    function fn3() {
+                        let xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = () => {
+                            console.log(`State: ${xhr.readyState}`);
+                            if(xhr.readyState === 4) {
+                                console.log(`HTTP-response status: ${xhr.status}`);
+                                if(xhr.status === 200) {
+                                    console.log(`Response type: ${xhr.responseType}`);
+                                    console.log(`Response: ${xhr.responseText}`);
+                                    console.log(JSON.parse(xhr.responseText));
+
+                                    const data = JSON.parse(xhr.responseText);
+
+                                    result3.innerHTML = '';
+                                    result3.innerHTML = `<div>
+                                        <h3>IP: ${data.data.ip}</h3>
+                                        <p>City: ${data.data.location.city.name}</p>
+                                        <p>Country: ${data.data.location.country.name}</p>
+                                        </div>`;
+                                };
+                            };
+                        };
+                        xhr.open("GET", "https://api.ipbase.com/v2/info", true);
+                        xhr.setRequestHeader("apikey", "RAbHQxh7nQpFpMdXJHQsTgDvp6cFt0puJj7lpI7n");
+                        xhr.send(null);
+                    }
+                </script>  
+            </section>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h2>Free test JSON API</h2>
+                        <a href="#" class="btn btn-primary" onclick="fn4()">Request</a>
+                        <p id="result4"></p>
+                    </div>
+                </div>
+                <script>
+                    function fn4() {
+                        fetch('https://jsonplaceholder.typicode.com/users')
+                        .then(response => {
+                            console.log(`Object response: `, response);
+                            response.json().then(data => {
+                                result4.innerHTML = '';
+                                data.forEach(item => {
+                                    result4.innerHTML += `<div>
+                                        <h3>Name: ${item.name}</h3>
+                                        <p>E-mail: ${item.email}</p>
+                                        <p>Company: ${item.company.name}</p>
+                                        </div>`
+                                });
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                    }
+                </script>
+            </section>
+
         </div>
     </div>
 
