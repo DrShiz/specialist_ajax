@@ -162,6 +162,50 @@
                 </script>
             </section>
 
+            <section>
+                <h3>Add New User</h3>
+                <form name="post2">
+                    <div class="mb-3">
+                        <input type="text" name="name" id="id_name" placeholder="Name">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="email" id="email" placeholder="E-mail">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="company" id="company" placeholder="Company">  
+                    </div>
+                </form>  
+                <a href="#" class="btn btn-primary" onclick="fnPost3()">POST-request</a>
+                <p id="result3"></p>
+                <script>
+                    function fnPost3() {
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: id_name.value,
+                                email: email.value,
+                                company: {
+                                    name: company.value
+                                }
+                            })
+
+                        };
+
+                        fetch('https://jsonplaceholder.typicode.com/users', options)
+                        .then(response => {
+                            response.json().then(data => {
+                                result3.innerHTML = JSON.stringify(data);
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                    };
+                </script>
+            </section>
+
         </div>
     </div>
 
