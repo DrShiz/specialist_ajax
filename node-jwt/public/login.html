@@ -10,29 +10,28 @@
       crossorigin="anonymous"
     />
 
-    <title>Пример работы с JWT</title>
+    <title>Working with JWT example</title>
   </head>
 
   <body>
     <div class="container">
       <div class="row">
-        <h1>Вход</h1>
-        <p class="lead">Для входа, введите учётные данные. Например, <code>user1</code> и <code>password1</code></p>
+        <h1>Login</h1>
+        <p class="lead">Type your credentials.</p>
 
         <form name="post1">
           <div class="mb-3">
-            <label for="login" class="form-label">Логин</label>
+            <label for="login" class="form-label">Login</label>
             <input
               type="text"
               class="form-control"
               name="login"
               id="login"
-              placeholder="Введите логин"
               autocomplete="off"
             />
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">Пароль</label>
+            <label for="password" class="form-label">Password</label>
             <input class="form-control" name="password" id="password" />
           </div>
           <div class="mb-3">
@@ -40,27 +39,27 @@
               class="btn  btn-secondary"
               type="button"
               id="btnFill"
-              value="Заполнить"
+              value="Autofill"
               onclick="fillValue()"
             />
             <input
               class="btn btn-primary"
               type="button"
               id="btnLogin"
-              value="Войти"
+              value="Login"
               onclick="fn()"
             />
           </div>
         </form>
 
-        <h4>Результат</h4>
+        <h4>Result:</h4>
         <div id="result" class="text-break"></div>
       </div>
 
       <hr />
 
       <section>
-        <h3>Запросы к API</h3>
+        <h3>Request to API</h3>
         <div class="mb-3">
             <label for="jwt_token" class="form-label">JWT</label>
             <input
@@ -68,7 +67,6 @@
               class="form-control"
               name="jwt_token"
               id="jwt_token"
-              placeholder="Введите токен"
               autocomplete="off"
             />
         </div>
@@ -82,15 +80,16 @@
               onclick="user()"
             />
         </div>
-        <h4>Результат запроса к <code>/user</code></h4>
+        <h4>Result of request to <code>/user</code>:</h4>
         <div id="result2" class="text-break"></div>
-     </section>
+      </section>
     </div>
     <script>
-        function fillValue(){
-            login.value = 'user1';
-            password.value = 'password1';
-        }
+      function fillValue(){
+          login.value = 'user1';
+          password.value = 'password1';
+      };
+
       function fn() {
         fetch("/api/auth", {
           // credentials: 'include',
@@ -106,27 +105,37 @@
             password: password.value,
           }),
         })
-          .then((body) => body.json())
-          .then((body) => (result.innerHTML = JSON.stringify(body, null, " ")));
+          .then(body => body.json())
+          .then(body => {
+            // result.innerHTML = JSON.stringify(body, null, " ");
+            let token;
+            if(body.token) {
+              token = body.token;
+              localStorage.setItem('token', token);
+            };
+          });
 
-      }
+      };
 
       function user(){
+        const jwtToken = localStorage.getItem('token');
+        if(!jwtToken) return;
+
         fetch("/user", {
           // credentials: 'include',
           method: "GET",
           mode: "cors",
-          url: `http://127.0.0.1:3000`,
+          url: "http://127.0.0.1:3000",
           headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + jwt_token.value,
+            "Authorization": "Bearer " + jwtToken,
           },
         })
           .then((body) => body.json())
           .then((body) => (result2.innerHTML = JSON.stringify(body, null, " ")));
 
-      }
+      };
     </script>
 
     <script
