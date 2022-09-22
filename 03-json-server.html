@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Working of JSON-server</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <h1>Working of JSON-server</h1>
+            </div>
+            <hr>
+
+            <section>
+                <h3>XMLHttpRequest</h3>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrGETPosts() ;return false;">GET /posts</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrGETPosts(1) ;return false;">GET /posts/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrGETComments() ;return false;">GET /comments</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrGETComments(1) ;return false;">GET /comments/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrGETProfile() ;return false;">GET /profile</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrPOSTPosts({title: 'Title3', author: 'Author3', price: 100});return false;">POST /posts</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrPATCHPosts({id: 1, title: 'Title1', author: 'Author4', price: 1020}) ;return false;">PATCH /posts/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="xhrDELETEPosts(1) ;return false;">DELETE /posts/1</a>
+                <h4>Results:</h4>
+                <pre id="result1"></pre>
+            </section>
+            <script>
+                const url = 'http://localhost:3000/'
+                function xhrGETPosts(id) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)) {
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                    xhr.open('GET', url+'posts/'+(id ? id: ''), true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(null);
+                };
+                function xhrGETComments(id) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)) {
+
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                        xhr.open('GET', url+'comments/'+(id ? id: ''), true);
+                    xhr.send(null);
+                };
+                function xhrGETProfile() {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)){
+
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                        xhr.open('GET', url+'profile/', true);
+                    xhr.send(null);
+                };
+                function xhrPOSTPosts(post) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)) {
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                    xhr.open('POST', url+'posts/', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(post));
+                };
+                function xhrPATCHPosts({id, title, author, price}) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)) {
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                    xhr.open('PATCH', url+'posts/'+(id ? id: ''), true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify({title, author, price}));
+                };
+                function xhrDELETEPosts(id) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                            if(xhr.readyState === 4) {
+                                if([200, 201].includes(xhr.status)) {
+                                    result1.innerHTML = xhr.responseText;
+                                };
+                            };
+                        };
+                    xhr.open('DELETE', url+'posts/'+(id ? id: ''), true);
+                    xhr.send(null);
+                };
+            </script>
+            <hr>
+            <section>
+                <h3>Fetch API</h3>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchGETPosts() ;return false;">GET /posts</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchGETPosts(1) ;return false;">GET /posts/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchGETComments() ;return false;">GET /comments</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchGETComments(1) ;return false;">GET /comments/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchGETProfile() ;return false;">GET /profile</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchPOSTPosts({title: 'Title3', author: 'Author3', price: 100}) ;return false;">POST /posts</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchPATCHPosts({id: 1, title: 'Title1', author: 'Author5', price: 20}) ;return false;">PATCH /posts/1</a>
+                <a href="#" class="btn btn-primary m-2" onclick="fetchDELETEPosts(1) ;return false;">DELETE /posts/1</a>
+                <h4>Results:</h4>
+                <pre id="result2"></pre>
+            </section>
+            <script>
+                function fetchGETPosts(id) {
+                    fetch(url+'posts/'+(id ? id: ''),
+                        {
+                            method: 'GET',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+                function fetchGETComments(id) {
+                    fetch(url+'comments/'+(id ? id: ''),
+                        {
+                            method: 'GET',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+                function fetchGETProfile() {
+                    fetch(url+'profile/',
+                        {
+                            method: 'GET',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+                function fetchPOSTPosts(post) {
+                    fetch(url+'posts/',
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(post)
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+                function fetchPATCHPosts({id, title, author, price}) {
+                    fetch(url+'posts/'+(id ? id: ''),
+                        {
+                            method: 'PATCH',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({title, author, price})
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+                function fetchDELETEPosts(id) {
+                    fetch(url+'posts/'+(id ? id: ''),
+                        {
+                            method: 'DELETE',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            response.json()
+                            .then(data => {
+                                result2.innerHTML = JSON.stringify(data, null, ' ');
+                            })
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                };
+
+                async function getPosts() {
+                        const result = await fetch(url+'posts/')
+                            .then(body => body.json());
+                        return result
+                };
+            </script>
+            <hr>
+            <hr>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h4>Get post by id</h4>
+                        <form>
+                            <div class="row">
+                                <div class='col-1'>
+                                    <input type="text" placeholder="Post id" id="post_id" class="form-control" style="width: 75px">
+                                </div>
+                                <div class='col-1'>
+                                    <input type="button" class="btn btn-primary" onclick="searchPostById()" value="Ok">
+                                </div>  
+                            </div>
+                        </form>
+                        <pre class="post" id="post"></pre>
+                        <script>
+                            function searchPostById() {
+                                post.innerHTML = '';
+                                id = post_id.value;
+                                if(id) {
+                                    fetch(url+'posts/'+id,
+                                    {
+                                        method: 'GET',
+                                        mode: 'cors',
+                                        cache: 'no-cache',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        }
+                                    })
+                                    .then(response => {
+                                        response.json()
+                                        .then(data => {
+                                            post.innerHTML = JSON.stringify(data, null, ' ');
+                                        })
+                                    }).catch(error => {
+                                        console.log(error);
+                                    })
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h4>Search post</h4>
+                        <form>
+                            <div class="row">
+                                <div class='col-2'>
+                                    <input type="text"
+                                            placeholder="Post title" 
+                                            id="post_search" 
+                                            class="form-control" 
+                                            style="width: 140px"
+                                            onkeyup="searchPost()">
+                                </div>
+                            </div>
+                        </form>
+                        <pre class="post" id="post2"></pre>
+                        <script>
+                            async function searchPost() {
+                                post2.innerHTML = '';
+                                title = post_search.value;
+                                if(title) {
+                                    let post = await fetch(url+'posts/?q='+title,
+                                    {
+                                        method: 'GET',
+                                        mode: 'cors',
+                                        cache: 'no-cache',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        }
+                                    })
+                                    .then(response => {
+                                        response.json()
+                                        .then(data => {
+                                            post2.innerHTML = JSON.stringify(data, null, ' ');
+                                        })
+                                    }).catch(error => {
+                                        console.log(error);
+                                    })
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </section>
+
+            <hr>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h4>Add post</h4>
+                        <form>
+                            <div class="row">
+                                <div class="col-2"><input class="form-control" type="text" placeholder="Post title" style="width: 150px" id="post_title"></div>    
+                                <div class="col-2"><input class="form-control" type="text" placeholder="Post author" style="width: 150px" id="post_author"></div>
+                                <div class="col-2"><input class="form-control" type="text" placeholder="Post price" style="width: 150px" id="post_price"></div>
+                                <div class="col-2"><input class="btn btn-primary" type="button" onclick="addPost()" value="Ok"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function addPost() {
+                        let post = {
+                            title: post_title.value,
+                            author: post_author.value,
+                            price: post_price.value
+                        }
+                        fetch(url+'posts/',
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(post)
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                    };
+                </script>
+            </section>
+            <br>
+            <hr>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h4>All posts</h4>
+                        <table class="table" id="posts">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>asd</td>
+                                <td>asd</td>
+                                <td>asd</td>
+                                <td>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <script>
+                    async function showPosts(selector) {
+                        const table = document.querySelector(selector);
+                        const tr = table.getElementsByTagName('tr');
+                        for(let i = tr.length-1; i > 0; i--){
+                            tr[i].remove();
+                        };
+                        posts = await getPosts();
+                        posts.forEach(item => {
+                            const tr = document.createElement('tr');
+                            let td;
+
+                            td = document.createElement('td');
+                            td.innerHTML = item.title;
+                            tr.appendChild(td);
+
+                            td = document.createElement('td');
+                            td.innerHTML = item.author;
+                            tr.appendChild(td);
+
+                            td = document.createElement('td');
+                            td.innerHTML = item.price;
+                            tr.appendChild(td);
+
+                            td = document.createElement('td');
+                            btnDelete = document.createElement('button');
+                            btnDelete.className = 'btn btn-outline-danger';
+                            btnDelete.innerHTML = 'Delete';
+                            btnDelete.setAttribute('data-id', item.id);
+                            btnDelete.addEventListener('click', (ev) => {
+                                fetchDELETEPosts(ev.target.getAttribute('data-id'))
+                            });
+                            td.appendChild(btnDelete);
+                            tr.appendChild(td);
+
+                            table.appendChild(tr);
+                        })
+                    };
+                    showPosts('#posts');
+                </script>
+            </section>
+
+        </div>
+    </body> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</html>

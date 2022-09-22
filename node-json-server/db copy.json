@@ -1,0 +1,26 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "author": "Author1",
+      "title": "Title1",
+      "price": 1000
+    },
+    {
+        "id": 2,
+        "author": "Author2",
+        "title": "Title2",
+        "price": 999
+    }
+  ],
+  "comments": [
+    {
+        "id": 1, 
+        "text": "Very interesting post!",
+        "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
