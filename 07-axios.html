@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Axios.js</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="col-md-12">
+                <h1>Axios.js</h1>
+            </div>
+
+
+            <div class="row">
+                <div class="mb-3"><input class='btn btn-primary' type="button" value="Button1" onclick="fn1()"></div>
+                <div class="mb-3"><input class='btn btn-primary' type="button" value="Button2" onclick="fn2()"></div>
+            </div>
+
+            <div class="row">
+                <h4>Results:</h4>
+                <pre id="result"></pre>
+            </div>
+
+        </div>
+        <script>
+            function fn1() {
+                axios.get('/00-test.json')
+                .then(body => {
+                    console.log(body);
+                    result.innerHTML = JSON.stringify(body.data, null, ' ');
+                });
+            };
+            function fn2() {
+
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    </body>
+</html>
